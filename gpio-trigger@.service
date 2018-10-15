@@ -1,0 +1,21 @@
+[Unit]
+Description=WiringPi GPIO Trigger
+
+[Service]
+# This can be up, down, or tri
+Environment=GPIO_PULLUP=up
+
+# This can be rising, falling, or both
+Environment=GPIO_DIR=falling
+
+Environment=GPIO_DEBOUNCE=1.0
+EnvironmentFile=/etc/gpio-trigger/%i
+
+ExecStartPre=/usr/bin/gpio -g mode %i in
+ExecStartPre=/usr/bin/gpio -g mode %i $GPIO_PULLUP
+ExecStart=/bin/sh -c "/usr/bin/gpio -g wfi %i $GPIO_DIR && $GPIO_COMMAND"
+ExecStopPost=/bin/sleep $GPIO_DEBOUNCE
+Restart=on-success
+
+[Install]
+WantedBy=multi-user.target
