@@ -1,5 +1,5 @@
 [Unit]
-Description=WiringPi GPIO Trigger
+Description=Trigger for GPIO pin %i
 
 [Service]
 # This can be up, down, or tri
